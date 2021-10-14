@@ -4,26 +4,47 @@ public class World {
     public static void main(String[] args){
         System.out.println("Start");
         String[] tab = { "f", "f", "r", "l" };
-        run(tab);
+        Direction[] tab1 = string_to_enum(tab);
+        run(tab1);
         System.out.println("Stop");
     }
-    public static void run(String[] args){
+    public static void run(Direction[] args){
         for(int i = 0; i < args.length; i++){
             switch(args[i]){
-                case "f":
+                case FORWARD:
                     out.println("Zwierzak idzie do przodu");
                     break;
-                case "b":
+                case BACKWARD:
                     out.println("Zwierzak idzie do tyłu");
                     break;
-                case "r":
+                case RIGHT:
                     out.println("Zwierzak skręca w prawo");
                     break;
-                case "l":
+                case LEFT:
                     out.println("Zwierzak skręca w lewo");
                     break;
 
             }
         }
+    }
+    public static Direction[] string_to_enum(String[] arg){
+        Direction[] tab = new Direction[arg.length];
+        for (int i = 0; i < arg.length; i++){
+            switch(arg[i]){
+                case "f":
+                    tab[i] = Direction.FORWARD;
+                    break;
+                case "b":
+                    tab[i] = Direction.BACKWARD;
+                    break;
+                case "r":
+                    tab[i] = Direction.RIGHT;
+                    break;
+                case "l":
+                    tab[i] = Direction.LEFT;
+                    break;
+            }
+        }
+        return tab;
     }
 }
