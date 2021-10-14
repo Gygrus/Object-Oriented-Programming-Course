@@ -2,11 +2,11 @@ package agh.ics.oop;
 import static java.lang.System.out;
 public class World {
     public static void main(String[] args){
-        System.out.println("Start");
+        out.println("Start");
         String[] tab = { "f", "f", "r", "l" };
         Direction[] tab1 = string_to_enum(tab);
         run(tab1);
-        System.out.println("Stop");
+        out.println("Stop");
     }
     public static void run(Direction[] args){
         for(int i = 0; i < args.length; i++){
