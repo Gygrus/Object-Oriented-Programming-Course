@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Vector2dTest {
-
     @Test
     public void testEquals(){
         String[] tab1 = new String[5];
