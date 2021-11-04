@@ -2,14 +2,34 @@ package agh.ics.oop;
 
 public class Animal {
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d positioned = new Vector2d(2, 2);
+    private IWorldMap map;
+    private Vector2d initialPosition;
+
+
+    public Animal(IWorldMap map, Vector2d initialPosition) {
+        this.map = map;
+        this.initialPosition = initialPosition;
+    }
+
+    public Vector2d getInitialPosition() {
+        return this.initialPosition;
+    }
+
+    public MapDirection getOrientation() {
+        return this.orientation;
+    }
 
     public String toString(){
-        return this.positioned + "-" + this.orientation;
+        return switch (this.orientation) {
+            case NORTH -> "N";
+            case SOUTH -> "S";
+            case EAST -> "E";
+            case WEST -> "W";
+        };
     }
 
     public boolean isAt(Vector2d position) {
-        return this.positioned.equals(position);
+        return this.initialPosition.equals(position);
     }
 
     public void move(MoveDirection direction) {
@@ -17,17 +37,16 @@ public class Animal {
             case RIGHT -> this.orientation = this.orientation.next();
             case LEFT -> this.orientation = this.orientation.previous();
             case FORWARD -> {
-                Vector2d newvec1 = this.positioned.add(this.orientation.toUnitVector());
-                if (newvec1.precedes(new Vector2d(4, 4)) && newvec1.follows(new Vector2d(0, 0))) {
-                    this.positioned = newvec1;
+                if (this.map.canMoveTo(this.initialPosition.add(this.orientation.toUnitVector()))) {
+                    this.initialPosition = this.initialPosition.add(this.orientation.toUnitVector());
                 }
             }
             case BACKWARD -> {
-                Vector2d newvec2 = this.positioned.subtract(this.orientation.toUnitVector());
-                if (newvec2.precedes(new Vector2d(4, 4)) && newvec2.follows(new Vector2d(0, 0))) {
-                    this.positioned = newvec2;
+                if (this.map.canMoveTo(this.initialPosition.subtract(this.orientation.toUnitVector()))) {
+                    this.initialPosition = this.initialPosition.subtract(this.orientation.toUnitVector());
                 }
             }
         }
     }
+
 }
