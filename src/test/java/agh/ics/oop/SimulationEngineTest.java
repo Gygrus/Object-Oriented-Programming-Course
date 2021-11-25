@@ -37,29 +37,29 @@ class SimulationEngineTest {
         IEngine engine = new SimulationEngine(directions, map1, positions1);
         engine.run();
         SimulationEngine engine2 = (SimulationEngine) engine;
-        assertEquals(new Vector2d(6, 4), engine2.getAnimals().get(0).getInitialPosition());
-        assertEquals(new Vector2d(2, 2), engine2.getAnimals().get(1).getInitialPosition());
+        assertEquals(new Vector2d(6, 4), engine2.getAnimals().get(0).getPosition());
+        assertEquals(new Vector2d(2, 2), engine2.getAnimals().get(1).getPosition());
 
         directions = new OptionsParser().parse(tab4);
         engine = new SimulationEngine(directions, map4, positions5);
         engine.run();
         engine2 = (SimulationEngine) engine;
-        assertEquals(new Vector2d(0, 1), engine2.getAnimals().get(0).getInitialPosition());
-        assertEquals(new Vector2d(4, 1), engine2.getAnimals().get(1).getInitialPosition());
+        assertEquals(new Vector2d(0, 1), engine2.getAnimals().get(0).getPosition());
+        assertEquals(new Vector2d(4, 1), engine2.getAnimals().get(1).getPosition());
 
         directions = new OptionsParser().parse(tab2);
         engine = new SimulationEngine(directions, map2, positions4);
         engine.run();
         engine2 = (SimulationEngine) engine;
-        assertEquals(new Vector2d(7, 2), engine2.getAnimals().get(0).getInitialPosition());
-        assertEquals(new Vector2d(0, 1), engine2.getAnimals().get(1).getInitialPosition());
+        assertEquals(new Vector2d(7, 2), engine2.getAnimals().get(0).getPosition());
+        assertEquals(new Vector2d(0, 1), engine2.getAnimals().get(1).getPosition());
 
         directions = new OptionsParser().parse(tab3);
         engine = new SimulationEngine(directions, map3, positions3);
         engine.run();
         engine2 = (SimulationEngine) engine;
-        assertEquals(new Vector2d(6, 4), engine2.getAnimals().get(0).getInitialPosition());
-        assertEquals(new Vector2d(3, 1), engine2.getAnimals().get(1).getInitialPosition());
+        assertEquals(new Vector2d(6, 4), engine2.getAnimals().get(0).getPosition());
+        assertEquals(new Vector2d(3, 1), engine2.getAnimals().get(1).getPosition());
 
     }
 

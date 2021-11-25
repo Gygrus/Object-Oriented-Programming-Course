@@ -1,11 +1,13 @@
 package agh.ics.oop;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class GrassField extends AbstractWorldMap {
     private final int numOfBushes;
-    private ArrayList<Grass> bushes = new ArrayList<Grass>();
-    public GrassField(int n){
+    private HashMap<Vector2d, Grass> bushes = new HashMap<Vector2d, Grass>();
+
+    public GrassField(int n) {
         this.numOfBushes = n;
         generateBushes();
     }
@@ -14,53 +16,53 @@ class GrassField extends AbstractWorldMap {
         int i = 0;
         int curRandom_x, curRandom_y;
         Vector2d curVec;
-        while (i < this.numOfBushes){
-            curRandom_x = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(this.numOfBushes*10)+1);
-            curRandom_y = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(this.numOfBushes*10)+1);
+        while (i < this.numOfBushes) {
+            curRandom_x = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(this.numOfBushes * 10) + 1);
+            curRandom_y = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(this.numOfBushes * 10) + 1);
             curVec = new Vector2d(curRandom_x, curRandom_y);
-            if (!containsValueBush(this.bushes, curVec)){
-                this.bushes.add(new Grass(curVec));
-                i+=1;
+            if (!this.bushes.containsKey(curVec)) {
+                this.bushes.put(curVec, new Grass(curVec));
+                i += 1;
             }
         }
     }
-    @Override protected Vector2d lLeftGet() {
-        Vector2d currentVec = this.animals.get(0).getInitialPosition();
-        for (Animal animal : this.animals) currentVec = currentVec.lowerLeft(animal.getInitialPosition());
 
-        for (Grass bush : this.bushes) currentVec = currentVec.lowerLeft(bush.getPostition());
+    @Override
+    protected Vector2d lLeftGet() {
+        Vector2d currentVec = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.lowerLeft(position);
 
-        return currentVec;
-    }
-
-    @Override protected Vector2d uRightGet() {
-        Vector2d currentVec = this.animals.get(0).getInitialPosition();
-        for (Animal animal : this.animals) currentVec = currentVec.upperRight(animal.getInitialPosition());
-
-        for (Grass bush : this.bushes) currentVec = currentVec.upperRight(bush.getPostition());
+        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.lowerLeft(position);
 
         return currentVec;
     }
 
-    private boolean containsValueBush(final ArrayList<Grass> list, Vector2d vec){
-        return list.stream().anyMatch(o -> o.getPostition().equals(vec));
+    @Override
+    protected Vector2d uRightGet() {
+        Vector2d currentVec = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.upperRight(position);
+
+        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.upperRight(position);
+
+        return currentVec;
     }
 
-    @Override public boolean isOccupied(Vector2d position) {
-        return super.isOccupied(position) || containsValueBush(this.bushes, position);
+//    private boolean containsValueBush(final ArrayList<Grass> list, Vector2d vec){
+//        return list.stream().anyMatch(o -> o.getPostition().equals(vec));
+//    }
+
+    @Override
+    public boolean isOccupied(Vector2d position) {
+        return super.isOccupied(position) || this.bushes.containsKey(position);
     }
 
 
-    @Override public Object objectAt(Vector2d position) {
+    @Override
+    public Object objectAt(Vector2d position) {
         Object obj = super.objectAt(position);
-        if (obj == null) {
-            for (Grass a : this.bushes) {
-                if (a.getPostition().equals(position)) {
-                    return a;
-                }
-            }
-            return null;
+        if (obj != null) {
+            return obj;
         }
-        return obj;
-        }
+        return this.bushes.get(position);
     }
+}
