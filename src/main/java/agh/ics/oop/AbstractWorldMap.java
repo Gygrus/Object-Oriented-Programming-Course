@@ -32,7 +32,7 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
             this.animals.put(animal.getPosition(), animal);
             return true;
         } else {
-            return false;
+            throw new IllegalArgumentException(animal.getPosition().toString() + " is invalid place to place an animal");
         }
     }
 

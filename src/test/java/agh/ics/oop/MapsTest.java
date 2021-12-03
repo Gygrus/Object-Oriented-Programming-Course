@@ -46,7 +46,10 @@ class MapsTest {
         assertTrue(map2.place(specificAnimal));
         assertTrue(map2.place(new Animal (map2, testVec1)));
         assertTrue(map2.place(new Animal (map2, testVec2)));
-        assertFalse(map2.place(new Animal (map2, testVec3)));
+        assertThrows(IllegalArgumentException.class,
+                ()->{
+                    map2.place(new Animal (map2, testVec3));
+                });
         assertTrue(map2.place(new Animal (map2, testVec4)));
         //canMoveTo
         assertTrue(map2.canMoveTo(testVec5));

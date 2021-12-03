@@ -3,10 +3,10 @@ package agh.ics.oop;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Animal {
+public class Animal extends MapObject {
     private MapDirection orientation = MapDirection.NORTH;
     private IWorldMap map;
-    private Vector2d position;
+//    private Vector2d position;
     private List<IPositionChangeObserver> observerList = new ArrayList<>();
 
 
@@ -33,9 +33,9 @@ public class Animal {
         }
     }
 
-    public Vector2d getPosition() {
-        return this.position;
-    }
+//    public Vector2d getPosition() {
+//        return this.position;
+//    }
 
 
     public String toString(){

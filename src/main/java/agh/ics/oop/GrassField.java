@@ -6,6 +6,7 @@ import java.util.HashMap;
 class GrassField extends AbstractWorldMap {
     private final int numOfBushes;
     private HashMap<Vector2d, Grass> bushes = new HashMap<Vector2d, Grass>();
+    private MapBoundary boundaryData = new MapBoundary();
 
     public GrassField(int n) {
         this.numOfBushes = n;
@@ -22,6 +23,7 @@ class GrassField extends AbstractWorldMap {
             curVec = new Vector2d(curRandom_x, curRandom_y);
             if (!this.bushes.containsKey(curVec)) {
                 this.bushes.put(curVec, new Grass(curVec));
+                this.boundaryData.addBush(curVec);
                 i += 1;
             }
         }
@@ -29,22 +31,22 @@ class GrassField extends AbstractWorldMap {
 
     @Override
     protected Vector2d lLeftGet() {
-        Vector2d currentVec = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.lowerLeft(position);
+//        Vector2d currentVec = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+//        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.lowerLeft(position);
+//
+//        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.lowerLeft(position);
 
-        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.lowerLeft(position);
-
-        return currentVec;
+        return this.boundaryData.getLowerLeft();
     }
 
     @Override
     protected Vector2d uRightGet() {
-        Vector2d currentVec = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
-        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.upperRight(position);
+//        Vector2d currentVec = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+//        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.upperRight(position);
+//
+//        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.upperRight(position);
 
-        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.upperRight(position);
-
-        return currentVec;
+        return this.boundaryData.getUpperRight();
     }
 
 //    private boolean containsValueBush(final ArrayList<Grass> list, Vector2d vec){
@@ -64,5 +66,15 @@ class GrassField extends AbstractWorldMap {
             return obj;
         }
         return this.bushes.get(position);
+    }
+
+    @Override
+    public boolean place(Animal animal) {
+        if (super.place(animal)){
+            this.boundaryData.addAnimal(animal.getPosition());
+            animal.addObserver(this.boundaryData);
+            return true;
+        }
+        return false;
     }
 }
