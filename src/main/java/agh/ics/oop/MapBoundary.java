@@ -59,12 +59,21 @@ public class MapBoundary implements IPositionChangeObserver {
         this.yAxisAnimals.add(position);
     }
 
-    protected Vector2d getLowerLeft(){
-        return new Vector2d (Math.min(this.xAxisAnimals.first().getCordX(), this.xAxisBushes.first().getCordX()), Math.min(this.yAxisAnimals.first().getCordY(), this.yAxisBushes.first().getCordY()));
+    protected Vector2d getLowerLeft() {
+        if (!this.xAxisAnimals.isEmpty()) {
+            return new Vector2d(Math.min(this.xAxisAnimals.first().getCordX(), this.xAxisBushes.first().getCordX()), Math.min(this.yAxisAnimals.first().getCordY(), this.yAxisBushes.first().getCordY()));
+        } else {
+            return new Vector2d(this.xAxisBushes.first().getCordX(), this.yAxisBushes.first().getCordY());
+        }
     }
 
-    protected Vector2d getUpperRight(){
-        return new Vector2d (Math.max(this.xAxisAnimals.last().getCordX(), this.xAxisBushes.last().getCordX()), Math.max(this.yAxisAnimals.last().getCordY(), this.yAxisBushes.last().getCordY()));
+    protected Vector2d getUpperRight() {
+        if (!this.xAxisAnimals.isEmpty()) {
+        return new Vector2d(Math.max(this.xAxisAnimals.last().getCordX(), this.xAxisBushes.last().getCordX()), Math.max(this.yAxisAnimals.last().getCordY(), this.yAxisBushes.last().getCordY()));
+    } else {
+        return new Vector2d(this.xAxisBushes.last().getCordX(), this.yAxisBushes.last().getCordY());
     }
+    }
+
 
 }

@@ -9,11 +9,11 @@ class RectangularMap extends AbstractWorldMap {
         this.upperRight = new Vector2d(width, height);
     }
 
-    @Override protected Vector2d lLeftGet() {
+    @Override public Vector2d lLeftGet() {
         return this.lowerLeft;
     }
 
-    @Override protected Vector2d uRightGet() {
+    @Override public Vector2d uRightGet() {
         return this.upperRight;
     }
 

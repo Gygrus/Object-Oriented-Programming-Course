@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class GrassField extends AbstractWorldMap {
+public class GrassField extends AbstractWorldMap {
     private final int numOfBushes;
     private HashMap<Vector2d, Grass> bushes = new HashMap<Vector2d, Grass>();
     private MapBoundary boundaryData = new MapBoundary();
@@ -29,29 +29,21 @@ class GrassField extends AbstractWorldMap {
         }
     }
 
+    public HashMap<Vector2d, Grass> getBushes() {
+        return this.bushes;
+    }
+
     @Override
-    protected Vector2d lLeftGet() {
-//        Vector2d currentVec = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-//        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.lowerLeft(position);
-//
-//        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.lowerLeft(position);
+    public Vector2d lLeftGet() {
 
         return this.boundaryData.getLowerLeft();
     }
 
     @Override
-    protected Vector2d uRightGet() {
-//        Vector2d currentVec = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
-//        for (Vector2d position : this.animals.keySet()) currentVec = currentVec.upperRight(position);
-//
-//        for (Vector2d position : this.bushes.keySet()) currentVec = currentVec.upperRight(position);
+    public Vector2d uRightGet() {
 
         return this.boundaryData.getUpperRight();
     }
-
-//    private boolean containsValueBush(final ArrayList<Grass> list, Vector2d vec){
-//        return list.stream().anyMatch(o -> o.getPostition().equals(vec));
-//    }
 
     @Override
     public boolean isOccupied(Vector2d position) {

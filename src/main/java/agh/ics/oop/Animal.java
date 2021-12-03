@@ -6,7 +6,6 @@ import java.util.List;
 public class Animal extends MapObject {
     private MapDirection orientation = MapDirection.NORTH;
     private IWorldMap map;
-//    private Vector2d position;
     private List<IPositionChangeObserver> observerList = new ArrayList<>();
 
 
@@ -14,10 +13,6 @@ public class Animal extends MapObject {
         this.map = map;
         this.position = initialPosition;
     }
-
-//    public List<IPositionChangeObserver> getObserverList() {
-//        return this.observerList;
-//    }
 
     protected void addObserver(IPositionChangeObserver observer) {
         this.observerList.add(observer);
@@ -32,10 +27,6 @@ public class Animal extends MapObject {
             observerList.positionChanged(oldPosition, newPosition);
         }
     }
-
-//    public Vector2d getPosition() {
-//        return this.position;
-//    }
 
 
     public String toString(){
