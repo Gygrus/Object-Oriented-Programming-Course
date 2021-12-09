@@ -1,7 +1,9 @@
 package agh.ics.oop;
 
 
-class RectangularMap extends AbstractWorldMap {
+import java.util.HashMap;
+
+public class RectangularMap extends AbstractWorldMap {
     private final Vector2d lowerLeft = new Vector2d(0,0);
     private final Vector2d upperRight;
 

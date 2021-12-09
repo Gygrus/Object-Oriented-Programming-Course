@@ -17,6 +17,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 
     public abstract Vector2d uRightGet();
 
+    public HashMap<Vector2d, Grass> getBushes(){ return new HashMap<>(); };
+
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
         Animal movedAnimal = this.animals.remove(oldPosition);
         this.animals.put(newPosition, movedAnimal);

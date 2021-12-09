@@ -29,7 +29,7 @@ public class GrassField extends AbstractWorldMap {
         }
     }
 
-    public HashMap<Vector2d, Grass> getBushes() {
+    @Override public HashMap<Vector2d, Grass> getBushes() {
         return this.bushes;
     }
 
