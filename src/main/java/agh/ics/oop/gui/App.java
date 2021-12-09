@@ -40,13 +40,14 @@ public class App extends Application {
 
         int width = upperRight.getCordX() - lowerLeft.getCordX() + 2;
         int height = upperRight.getCordY() - lowerLeft.getCordY() + 2;
+
+        ColumnConstraints colConst = new ColumnConstraints(20);
+        RowConstraints rowConst = new RowConstraints(20);
         for (int i = 0; i < width; i++){
-            ColumnConstraints colConst = new ColumnConstraints(20);
             this.gridpane.getColumnConstraints().add(colConst);
         }
 
         for (int i = 0; i < height; i++){
-            RowConstraints rowConst = new RowConstraints(20);
             this.gridpane.getRowConstraints().add(rowConst);
         }
 
