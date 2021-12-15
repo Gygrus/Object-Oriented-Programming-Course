@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,17 @@ public class Animal extends MapObject {
     public Animal(IWorldMap map, Vector2d initialPosition) {
         this.map = map;
         this.position = initialPosition;
+    }
+
+    @Override
+    public String getInputStream() {
+        return switch (this.orientation) {
+            case NORTH -> "src/main/resources/up.png";
+            case SOUTH -> "src/main/resources/down.png";
+            case EAST -> "src/main/resources/right.png";
+            case WEST -> "src/main/resources/left.png";
+
+        };
     }
 
     protected void addObserver(IPositionChangeObserver observer) {

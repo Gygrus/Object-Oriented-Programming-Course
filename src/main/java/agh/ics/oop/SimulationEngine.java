@@ -1,17 +1,19 @@
 package agh.ics.oop;
 
+import agh.ics.oop.gui.App;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimulationEngine implements IEngine {
+public class SimulationEngine implements IEngine, Runnable {
     private MoveDirection[] directions;
     private IWorldMap map;
     private List<Animal> animals = new ArrayList<>();
     private Vector2d[] tabOfPositions;
+    private App guiObserver;
 
 
-    public SimulationEngine(MoveDirection[] directions, IWorldMap map, Vector2d[] tabOfPositions){
-        this.directions = directions;
+    public SimulationEngine(IWorldMap map, Vector2d[] tabOfPositions){
         this.map = map;
         this.tabOfPositions = tabOfPositions;
         for (Vector2d pos: tabOfPositions){
@@ -22,22 +24,24 @@ public class SimulationEngine implements IEngine {
             }
         }
 
-
-    public Vector2d[] getTabOfPositions() {
-        return this.tabOfPositions;
+    public void addGuiObserver(App observer){
+        this.guiObserver = observer;
     }
 
-    public List<Animal> getAnimals() { return this.animals;}
+    public void setDirections(MoveDirection[] directions) {this.directions = directions;}
+
+    public void guiUpdate() {
+        this.guiObserver.guiUpdate();
+    }
+
 
     public void run(){
         int i = 0;
         for (MoveDirection dir: this.directions) {
             this.animals.get(i%(this.animals.size())).move(dir);
-//            this.tabOfPositions[i%(map2.getAnimals().size())] = map2.getAnimals().get(i%(map2.getAnimals().size())).getInitialPosition();
+            guiUpdate();
             i += 1;
             System.out.println(map.toString());
-//            System.out.println(map2.getAnimals().get(0).getInitialPosition());
-//            System.out.println(map2.getAnimals().get(1).getInitialPosition());
         }
     }
 }

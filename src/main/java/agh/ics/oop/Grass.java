@@ -6,4 +6,12 @@ public class Grass extends MapObject {
     }
 
     public String toString(){return "*";}
+
+    @Override
+    public String getInputStream() {
+        return "src/main/resources/grass.png";
+    }
+
+    @Override
+    public String getLabel() { return "Trawa"; }
 }

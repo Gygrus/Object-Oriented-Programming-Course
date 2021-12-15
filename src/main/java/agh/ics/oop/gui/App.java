@@ -3,12 +3,14 @@ package agh.ics.oop.gui;
 //import agh.ics.oop.GrassField;
 import agh.ics.oop.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import static java.lang.System.out;
 
@@ -17,23 +19,46 @@ import static java.lang.System.out;
 
 
 public class App extends Application {
-    private IWorldMap map;
+    private AbstractWorldMap map;
     private GridPane gridpane = new GridPane();
+    private GuiElementBox vBoxGenerator = new GuiElementBox();
+    private int moveDelay = 300;
+    private Scene scene;
+    private Thread thread;
+    private SimulationEngine engine;
+    private VBox layout = new VBox();
 
     @Override
     public void init() {
         String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
 //        String[] args = getParameters().getRaw().toArray(new String[0]);
         MoveDirection[] directions = new OptionsParser().parse(args);
-        this.map = new GrassField(20);
-//        this.map = new RectangularMap(10, 10);
+        this.map = new GrassField(10);
+//        this.map = new RectangularMap(10, 16);
         Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(3, 4)};
-        IEngine engine = new SimulationEngine(directions, this.map, positions);
-        engine.run();
+        this.engine = new SimulationEngine(this.map, positions);
+        this.engine.addGuiObserver(this);
     }
 
-    private void createGridPane() {
-        AbstractWorldMap newMap = (AbstractWorldMap) this.map;
+
+    public void guiUpdate(){
+        Platform.runLater(()->{
+            this.gridpane.setGridLinesVisible(false);
+            this.gridpane.getChildren().clear();
+            this.gridpane.getColumnConstraints().clear();
+            this.gridpane.getRowConstraints().clear();
+            createGridPane(this.map);
+        });
+        try {
+            Thread.sleep(this.moveDelay);
+        } catch (InterruptedException ex){
+            out.println(ex);
+        }
+    }
+
+
+
+    private void createGridPane(AbstractWorldMap newMap) {
         this.gridpane.setGridLinesVisible(true);
         Vector2d lowerLeft = newMap.lLeftGet();
         Vector2d upperRight = newMap.uRightGet();
@@ -41,8 +66,9 @@ public class App extends Application {
         int width = upperRight.getCordX() - lowerLeft.getCordX() + 2;
         int height = upperRight.getCordY() - lowerLeft.getCordY() + 2;
 
-        ColumnConstraints colConst = new ColumnConstraints(20);
-        RowConstraints rowConst = new RowConstraints(20);
+        ColumnConstraints colConst = new ColumnConstraints(35);
+        RowConstraints rowConst = new RowConstraints(35);
+
         for (int i = 0; i < width; i++){
             this.gridpane.getColumnConstraints().add(colConst);
         }
@@ -67,24 +93,39 @@ public class App extends Application {
             this.gridpane.setHalignment(label, HPos.CENTER);
         }
 
-        for (Animal animal : newMap.getAnimals().values()){
-            Label label = new Label(animal.toString());
-            this.gridpane.add(label, animal.getPosition().getCordX() - lowerLeft.getCordX() + 1, upperRight.getCordY()-(animal.getPosition().getCordY())+1);
-            this.gridpane.setHalignment(label, HPos.CENTER);
+        for (MapObject animal : newMap.getAnimals().values()){
+            this.gridpane.add(this.vBoxGenerator.generateVBox(animal), animal.getPosition().getCordX() - lowerLeft.getCordX() + 1, upperRight.getCordY()-(animal.getPosition().getCordY())+1);
+
         }
 
-        for (Grass bush : newMap.getBushes().values()){
-            Label label = new Label(bush.toString());
-            this.gridpane.add(label, bush.getPosition().getCordX() - lowerLeft.getCordX() + 1, upperRight.getCordY()-(bush.getPosition().getCordY())+1);
-            this.gridpane.setHalignment(label, HPos.CENTER);
+        for (MapObject bush : newMap.getBushes().values()){
+            this.gridpane.add(this.vBoxGenerator.generateVBox(bush), bush.getPosition().getCordX() - lowerLeft.getCordX() + 1, upperRight.getCordY()-(bush.getPosition().getCordY())+1);
         }
+
+    }
+
+    private void addOtherGUI() {
+        HBox inputStart = new HBox();
+        TextField inputValue = new TextField();
+        Button simStart = new Button("Start");
+        simStart.setOnAction(e -> {
+            MoveDirection[] directions = new OptionsParser().parse(inputValue.getText().split(" "));
+            this.engine.setDirections(directions);
+            Thread curThread = new Thread(this.engine);
+            curThread.setDaemon(true);
+            curThread.start();
+        });
+        inputStart.getChildren().addAll(inputValue, simStart);
+        this.layout.getChildren().add(inputStart);
     }
 
     public void start(Stage primaryStage){
-        createGridPane();
-        Scene scene = new Scene(this.gridpane, 400, 400);
+        this.createGridPane(this.map);
+        this.layout.getChildren().add(this.gridpane);
+        this.addOtherGUI();
+        Scene scene = new Scene(this.layout, 800, 1000);
         primaryStage.setScene(scene);
-        getParameters().getRaw();
         primaryStage.show();
+
     }
 }
